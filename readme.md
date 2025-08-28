@@ -275,4 +275,221 @@ A submissão da consulta foi **Accepted** (Aceita), demonstrando que a solução
 
 <img width="723" height="206" alt="Image" src="https://github.com/user-attachments/assets/16f12f35-2eec-4c6b-91b1-ad94a49d5d6a" />
 
+-----
 
+## 💾 Problema 2622: Pessoas Jurídicas
+
+### 📖 Descrição
+
+Este problema, de **nível 1**, exige uma consulta SQL que identifique clientes que são pessoas jurídicas. O objetivo é listar o nome (`name`) de todos os clientes que possuem um registro na tabela `legal_person`, que armazena informações sobre pessoas jurídicas.
+
+### ⚙️ Detalhes das Tabelas
+
+A consulta é executada sobre as tabelas `customers` e `legal_person`, que são unidas por meio de suas chaves primárias e estrangeiras:
+
+  * **customers**:
+      * `id` (PK)
+      * `name`
+  * **legal\_person**:
+      * `id` (PK)
+      * `id_customers` (FK)
+
+### ✅ Resolução
+
+A solução para este problema utiliza uma junção implícita para combinar as duas tabelas. A cláusula `WHERE` é usada para unir as tabelas com base na igualdade de seus IDs (`C.id = L.id_customers`), garantindo que apenas os clientes que têm um registro correspondente na tabela `legal_person` sejam selecionados.
+
+```sql
+SELECT
+    C.name
+FROM
+    customers C, legal_person L
+WHERE
+    C.id = L.id_customers;
+```
+
+### 🏆 Resultado
+
+A submissão da consulta foi **Accepted** (Aceita), demonstrando que a solução está correta e atende aos requisitos do problema.
+
+<img width="719" height="210" alt="Image" src="https://github.com/user-attachments/assets/f55cedb7-9851-4511-bfae-3311c64de397" />
+
+-----
+
+## 💾 Problema 2616: Nenhuma Locação
+
+### 📖 Descrição
+
+Este problema, de **nível 5**, exige uma consulta SQL que identifique clientes que nunca fizeram uma locação. O objetivo é listar o `id` e o `name` de todos os clientes que não possuem um registro correspondente na tabela de locações.
+
+### ⚙️ Detalhes das Tabelas
+
+A consulta é executada sobre as tabelas `customers` e `locations`, que são unidas por meio de suas chaves primárias e estrangeiras:
+
+  * **customers**:
+      * `id` (PK)
+      * `name`
+  * **locations**:
+      * `id` (PK)
+      * `id_customers` (FK)
+
+### ✅ Resolução
+
+A solução para este problema utiliza um `LEFT JOIN` para combinar a tabela `customers` com a tabela `locations`. O `LEFT JOIN` retorna todos os clientes da tabela `customers` (lado esquerdo) e as locações correspondentes da tabela `locations` (lado direito). Para encontrar os clientes que nunca alugaram, a cláusula `WHERE` é usada para filtrar os resultados onde a coluna `id_customers` da tabela `locations` é `NULL`, o que indica que não houve uma correspondência. A ordenação é feita pelo ID do cliente para garantir a consistência do resultado.
+
+```sql
+SELECT
+    A.id,
+    A.name
+FROM
+    customers AS A
+LEFT JOIN
+    locations AS B ON A.id = B.id_customers
+WHERE
+    B.id_customers IS NULL
+ORDER BY
+    A.id;
+```
+
+### 🏆 Resultado
+
+A submissão da consulta foi **Accepted** (Aceita), demonstrando que a solução está correta e atende aos requisitos do problema.
+
+<img width="724" height="199" alt="Image" src="https://github.com/user-attachments/assets/e5d4ce1a-4d68-447d-8c8c-1d0de0d02501" />
+
+-----
+
+## 💾 Problema 2608: Maior e Menor Preço
+
+### 📖 Descrição
+
+Este problema, de **nível 1**, exige uma consulta SQL de agregação para encontrar o maior e o menor valor de uma coluna. O objetivo é exibir o preço máximo e o preço mínimo da tabela de produtos. As colunas de resultado devem ser nomeadas como `maior_preco` e `menor_preco`, respectivamente.
+
+### ⚙️ Detalhes da Tabela
+
+A consulta é executada sobre a tabela `products`, que possui a seguinte estrutura:
+
+| Coluna | Tipo |
+| :--- | :--- |
+| `id` (PK) | `numeric` |
+| `name` | `varchar` |
+| `amount` | `numeric` |
+| `price` | `numeric` |
+
+### ✅ Resolução
+
+A solução para este problema utiliza as funções de agregação `MAX()` e `MIN()`. A função `MAX(price)` retorna o maior valor da coluna `price`, e a função `MIN(price)` retorna o menor valor. Ambas as colunas de resultado são renomeadas usando a palavra-chave `AS`.
+
+```sql
+SELECT
+    MAX(price) AS maior_preco,
+    MIN(price) AS menor_preco
+FROM
+    products;
+```
+
+### 🏆 Resultado
+
+A submissão da consulta foi **Accepted** (Aceita), demonstrando que a solução está correta e atende aos requisitos do problema.
+
+<img width="722" height="205" alt="Image" src="https://github.com/user-attachments/assets/3cf8d321-2b16-4e11-99cd-7f18bf1fa037" />
+
+-----
+
+## 💾 Problema 2607: Cidades em Ordem Alfabética
+
+### 📖 Descrição
+
+Este problema, de **nível 1**, exige uma consulta SQL para listar as cidades de forma única e ordenada. O objetivo é exibir todas as cidades distintas da tabela de fornecedores, organizadas em ordem alfabética.
+
+### ⚙️ Detalhes da Tabela
+
+A consulta é executada sobre a tabela `providers`, que possui a seguinte estrutura:
+
+| Coluna | Tipo |
+| :--- | :--- |
+| `id` (PK) | `numeric` |
+| `name` | `varchar` |
+| `street` | `varchar` |
+| `city` | `varchar` |
+| `state` | `char` |
+
+### ✅ Resolução
+
+A solução para este problema utiliza o comando `SELECT` com a palavra-chave `DISTINCT` para garantir que cada cidade apareça apenas uma vez na lista. Em seguida, a cláusula `ORDER BY` é usada para ordenar os resultados em ordem alfabética, com base na coluna `city`.
+
+```sql
+SELECT
+    DISTINCT city
+FROM
+    providers
+ORDER BY
+    city;
+```
+
+### 🏆 Resultado
+
+A submissão da consulta foi **Accepted** (Aceita), demonstrando que a solução está correta e atende aos requisitos do problema.
+
+<img width="722" height="209" alt="Image" src="https://github.com/user-attachments/assets/afe642ec-bd55-4f03-b35c-c04c1eb4c41a" />
+
+-----
+
+## 💾 Problema 2615: Expandindo o Negócio
+
+### 📖 Descrição
+
+Este problema, de **nível 1**, exige uma consulta SQL simples. O objetivo é listar todas as cidades onde os clientes da empresa estão localizados. A consulta deve retornar a coluna `city` da tabela `customers`.
+
+### ⚙️ Detalhes da Tabela
+
+A consulta é executada sobre a tabela `customers`, que possui a seguinte estrutura:
+
+| Coluna | Tipo |
+| :--- | :--- |
+| `id` (PK) | `numeric` |
+| `name` | `varchar` |
+| `street` | `varchar` |
+| `city` | `varchar` |
+| `state` | `char` |
+| `credit_limit` | `numeric` |
+
+### ✅ Resolução
+
+A solução para este problema é uma consulta `SELECT` direta que seleciona a coluna `city` da tabela `customers`.
+
+```sql
+SELECT
+    city
+FROM
+    customers;
+```
+
+### 🏆 Resultado
+
+A submissão da consulta foi **Accepted** (Aceita), demonstrando que a solução está correta e atende aos requisitos do problema.
+
+<img width="650" height="185" alt="Image" src="https://github.com/user-attachments/assets/97e6155b-0e4b-40d0-aad7-37561ea536de" />
+
+Com certeza! Com base em todas as atividades, preparei uma conclusão profissional e detalhada, perfeita para a seção de `README.md` de um projeto no GitHub.
+
+---
+
+## Conclusão: Análise e Demonstração de Habilidades em SQL
+
+Este projeto de banco de dados, composto por uma série de desafios de complexidade crescente, serve como uma demonstração prática das minhas habilidades em SQL. Cada atividade foi cuidadosamente selecionada para cobrir um espectro de conceitos essenciais, desde consultas básicas até operações mais avançadas de junção e agregação.
+
+A progressão dos problemas, com base nos níveis de dificuldade, reflete uma metodologia de aprendizado estruturada:
+
+* **Nível 1**: Domínio das consultas fundamentais (`SELECT`, `DISTINCT`), ordenação (`ORDER BY`) e filtragem básica. Esta etapa estabeleceu uma base sólida para a manipulação de dados.
+* **Nível 2**: Aplicação de filtros mais complexos (`WHERE` com `OR`) e a introdução de junções de tabelas para resolver problemas que exigem a combinação de dados de fontes distintas.
+* **Nível 3**: Aprofundamento nas junções de múltiplas tabelas, permitindo a extração de informações específicas com base em critérios que se estendem por diferentes entidades.
+* **Nível 4 e 5**: Resolução de desafios avançados, como a identificação de registros sem correspondência (`LEFT JOIN` com `IS NULL`) e o uso de funções de agregação (`COUNT`, `MAX`, `MIN`) para sumarizar dados, demonstrando a capacidade de realizar análises complexas.
+
+### Resumo das Habilidades Demonstração:
+
+* **Consultas e Filtros**: Habilidade para extrair dados específicos usando `SELECT`, `FROM` e `WHERE`.
+* **Agregação**: Competência no uso de funções como `COUNT`, `MAX` e `MIN` para obter insights estatísticos.
+* **Junções de Tabelas**: Proficiência na combinação de dados de múltiplas tabelas, utilizando tanto a sintaxe implícita quanto `LEFT JOIN`, para resolver problemas de relacionamento entre entidades.
+* **Análise de Dados**: Capacidade de interpretar um problema e traduzi-lo em uma solução SQL eficiente e otimizada.
+
+A finalização bem-sucedida de cada desafio, atestada pelo `Accepted`, valida a precisão das minhas consultas e a compreensão dos conceitos de banco de dados. 
